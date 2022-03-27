@@ -58,7 +58,7 @@
         </el-form-item>
         <!-- 文章封面 -->
         <el-form-item label="封面" prop="cover_img">
-          <el-upload
+          <!-- <el-upload
             action="/my/addarticles/updatearticle"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
@@ -69,10 +69,24 @@
             :file-list="filelist"
           >
             <i class="el-icon-plus"></i>
-          </el-upload>
+          </el-upload> -->
           <!-- <el-dialog :visible.sync="tp">
             <img width="100%" :src="dialogImageUrl" alt="" />
           </el-dialog> -->
+
+          <el-upload
+            class="avatar-uploader"
+            action="/my/addarticles/updatearticle"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            ref="upload"
+            :on-remove="handleRemove"
+            :on-change="handleEditChange"
+          >
+            <img v-if="articleinfobyid.cover_img" :src="articleinfobyid.cover_img" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
         </el-form-item>
 
         <!-- 内容编辑区 -->
@@ -105,12 +119,29 @@ export default {
         title: "",
         cate_id: null,
         content: "",
+        cover_img:'',
       },
+
       total: 0,
       dialogVisible: false,
       msg: "这是 vue-ueditor-wrap ！",
       config: {
         UEDITOR_HOME_URL: "/UE/", // 需要令此处的URL等于对应 ueditor.config.js 中的配置。
+      },
+      editarticlerules: {
+        title: [
+          { required: true, message: "请输入文章标题", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
+        ],
+        cate_id: [
+          { required: true, message: "请输入文章分类", trigger: "blur" },
+        ],
+        state: [{ required: true, message: "请选择状态", trigger: "change" }],
       },
     };
   },
@@ -145,7 +176,7 @@ export default {
       //   this.articleinfobyid.title = res.message.data[0].title
       //   this.articleinfobyid.cate_id = res.message.data[0].cate_id
       //   this.articleinfobyid.content = res.message.data[0].content
-      this.filelist[0].url = res.message.data[0].cover_img;
+      this.articleinfobyid.cover_img= res.message.data[0].cover_img;
       console.log(res);
     },
     async delectarticle(id) {
@@ -178,6 +209,8 @@ export default {
     //更新文章信息函数
     async updatearticle() {
       const articleinfobyid = qs.stringify(this.articleinfobyid);
+      const file = this.$refs.upload.uploadFiles;
+      console.log(file)
 
       console.log(this.articleinfobyid.id);
 
@@ -186,6 +219,10 @@ export default {
         articleinfobyid
       );
       console.log(res);
+    },
+   // 图片上传成功执行的函数
+    handleAvatarSuccess(res, file) {
+      this.articleinfobyid.cover_img = URL.createObjectURL(file.raw);
     },
   },
   created() {

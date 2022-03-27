@@ -15,7 +15,7 @@
         </el-form-item>
         <!-- 文章封面 -->
         <el-form-item label="封面" prop="cover_img">
-          <el-upload
+          <!-- <el-upload
             action="/my/addarticles/add"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
@@ -25,6 +25,19 @@
             :on-change="handleEditChange"
           >
             <i class="el-icon-plus"></i>
+          </el-upload> -->
+          <el-upload
+            class="avatar-uploader"
+            action="/my/addarticles/add"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            ref="upload"
+            :on-remove="handleRemove"
+            :on-change="handleEditChange"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
 
@@ -51,13 +64,13 @@ import qs from "qs";
 export default {
   name: "ueditor",
   data() {
-    const checkimg = (rule,value,callback) =>{
-      if(!this.imglist){
-         callback(new Error('请上传图片'));
-    } else {
-      callback();
+    const checkimg = (rule, value, callback) => {
+      if (!this.imglist) {
+        callback(new Error("请上传图片"));
+      } else {
+        callback();
       }
-    }
+    };
     return {
       uploaddisabled: false,
       // dialogImageUrl: "",
@@ -66,7 +79,7 @@ export default {
       config: {
         UEDITOR_HOME_URL: "/UE/", // 需要令此处的URL等于对应 ueditor.config.js 中的配置。
       },
-      imageUrl:'',
+      imageUrl: "",
       // headers: { Authorization: window.sessionStorage.getItem("token") },
       cover_img: "",
 
@@ -76,7 +89,7 @@ export default {
         state: "",
         content: "",
       },
-      imglist:false,
+      imglist: false,
       addarticlerules: {
         title: [
           { required: true, message: "请输入文章标题", trigger: "blur" },
@@ -91,40 +104,36 @@ export default {
           { required: true, message: "请输入文章分类", trigger: "blur" },
         ],
         state: [{ required: true, message: "请选择状态", trigger: "change" }],
-        cover_img: [
-          { required: true, validator: checkimg, trigger: "change" },
-        ],
+        cover_img: [{ required: true, validator: checkimg, trigger: "change" }],
       },
     };
   },
   methods: {
     getUEContent() {
       const file = this.$refs.upload.uploadFiles[0];
-      // console.log(file)
+      console.log(file)
       this.$refs.addarticleruleForm.validate(async (valid) => {
-        console.log(valid)
+        console.log(valid);
         if (!valid) {
           return;
         }
-        try{
-             const formDate = new FormData();
-        formDate.append("cover_img", file.raw);
-        formDate.append("title", this.addarticleForm.title);
-        formDate.append("cate_id", this.addarticleForm.cate_id);
-        formDate.append("state", this.addarticleForm.state);
-        formDate.append("content", this.msg);
-        const addarticle = await this.$http.post(
-          "/my/addarticles/add",
-          formDate,
-          { "Content-Type": "application/x-www-form-urlencoded" }
-        )
-        console.log(addarticle);
-        this.$message.success('发布成功')
+        try {
+          const formDate = new FormData();
+          formDate.append("cover_img", file.raw);
+          formDate.append("title", this.addarticleForm.title);
+          formDate.append("cate_id", this.addarticleForm.cate_id);
+          formDate.append("state", this.addarticleForm.state);
+          formDate.append("content", this.msg);
+          const addarticle = await this.$http.post(
+            "/my/addarticles/add",
+            formDate,
+            { "Content-Type": "application/x-www-form-urlencoded" }
+          );
+          console.log(addarticle);
+          this.$message.success("发布成功");
+        } catch (error) {
+          console.log(error);
         }
-        catch(error){
-          console.log(error)
-        }
-     
       });
     },
     beforeAvatarUpload(file) {
@@ -138,9 +147,13 @@ export default {
       }
       return isJPG && isLt2M;
     },
+    // 图片上传成功执行的函数
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
     handleRemove(file, fileList) {
       this.uploaddisabled = false;
-      this.imglist = false
+      this.imglist = false;
     },
     handlePictureCardPreview(file) {
       // this.dialogImageUrl = file.url;
@@ -149,9 +162,9 @@ export default {
     handleEditChange(file, fileList) {
       if (fileList.length >= 1) {
         this.uploaddisabled = true;
-        this.imglist = true
+        this.imglist = true;
       }
-      console.log(fileList)
+      console.log(fileList);
     },
   },
 
@@ -182,11 +195,34 @@ export default {
 .edui-editor {
   width: 100%;
 }
-.hidden{
-  display: none!important;
+.hidden {
+  display: none !important;
 }
 
 .disabled .el-upload {
   display: none !important;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>
