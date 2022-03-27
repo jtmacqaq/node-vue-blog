@@ -44,7 +44,7 @@
       :before-close="handleClose"
     >
       <!-- 内容区 -->
-<el-form
+      <el-form
         :model="articleinfobyid"
         :rules="editarticlerules"
         ref="addarticleruleForm"
@@ -59,7 +59,7 @@
         <!-- 文章封面 -->
         <el-form-item label="封面" prop="cover_img">
           <el-upload
-            action="/my/addarticles/add"
+            action="/my/addarticles/updatearticle"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
@@ -76,13 +76,16 @@
         </el-form-item>
 
         <!-- 内容编辑区 -->
-        <vue-ueditor-wrap v-model="articleinfobyid.content" :config="config"></vue-ueditor-wrap>
+        <vue-ueditor-wrap
+          v-model="articleinfobyid.content"
+          :config="config"
+        ></vue-ueditor-wrap>
       </el-form>
 
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="updatearticle()">确 定</el-button>
-  </span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updatearticle()">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -97,12 +100,11 @@ export default {
         page_num: 1,
         page_size: 5,
       },
-      filelist:[{name:'',url:''}],
-      articleinfobyid:{
-          title:'',
-          cate_id:null,
-          content:''
-          
+      filelist: [{ name: "", url: "" }],
+      articleinfobyid: {
+        title: "",
+        cate_id: null,
+        content: "",
       },
       total: 0,
       dialogVisible: false,
@@ -136,13 +138,15 @@ export default {
     },
     async editarticle(id) {
       this.dialogVisible = true;
-      const {data:res} = await this.$http.get('/my/addarticles/articleinfo/'+ id)
-      this.articleinfobyid = res.message.data[0]
-    //   this.articleinfobyid.title = res.message.data[0].title
-    //   this.articleinfobyid.cate_id = res.message.data[0].cate_id
-    //   this.articleinfobyid.content = res.message.data[0].content
-      this.filelist[0].url = res.message.data[0].cover_img
-      console.log(res)
+      const { data: res } = await this.$http.get(
+        "/my/addarticles/articleinfo/" + id
+      );
+      this.articleinfobyid = res.message.data[0];
+      //   this.articleinfobyid.title = res.message.data[0].title
+      //   this.articleinfobyid.cate_id = res.message.data[0].cate_id
+      //   this.articleinfobyid.content = res.message.data[0].content
+      this.filelist[0].url = res.message.data[0].cover_img;
+      console.log(res);
     },
     async delectarticle(id) {
       const re = await this.$confirm(
@@ -169,26 +173,25 @@ export default {
         this.getarticlelb();
       }
     },
-    handlePictureCardPreview(file,fileList){},
-    handleRemove(file,fileList){
-
-
-    },
+    handlePictureCardPreview(file, fileList) {},
+    handleRemove(file, fileList) {},
     //更新文章信息函数
-    async updatearticle(){
-        const articleinfobyid = qs.stringify(this.articleinfobyid)
+    async updatearticle() {
+      const articleinfobyid = qs.stringify(this.articleinfobyid);
 
-        console.log(this.articleinfobyid.id)
+      console.log(this.articleinfobyid.id);
 
-        const {data:res} = await this.$http.post('/my/addarticles/updatearticle',articleinfobyid)
-        console.log(res)
-
-    }
+      const { data: res } = await this.$http.post(
+        "/my/addarticles/updatearticle",
+        articleinfobyid
+      );
+      console.log(res);
+    },
   },
   created() {
     this.getarticlelb();
   },
-    components: {
+  components: {
     VueUeditorWrap,
   },
 };
