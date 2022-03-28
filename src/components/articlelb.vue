@@ -10,7 +10,7 @@
         <el-table-column label="操作">
           <!-- 作用域插槽 -->
           <template slot-scope="scope">
-            {{ scope.row }}
+            <!-- {{ scope.row }} -->
             <el-button
               type="primary"
               icon="el-icon-edit"
@@ -58,22 +58,6 @@
         </el-form-item>
         <!-- 文章封面 -->
         <el-form-item label="封面" prop="cover_img">
-          <!-- <el-upload
-            action="/my/addarticles/updatearticle"
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            ref="upload"
-            :class="{ disabled: uploaddisabled }"
-            :on-change="handleEditChange"
-            :file-list="filelist"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload> -->
-          <!-- <el-dialog :visible.sync="tp">
-            <img width="100%" :src="dialogImageUrl" alt="" />
-          </el-dialog> -->
-
           <el-upload
             class="avatar-uploader"
             action="/my/addarticles/updatearticle"
@@ -84,7 +68,11 @@
             :on-remove="handleRemove"
             :on-change="handleEditChange"
           >
-            <img v-if="articleinfobyid.cover_img" :src="articleinfobyid.cover_img" class="avatar" />
+            <img
+              v-if="articleinfobyid.cover_img"
+              :src="articleinfobyid.cover_img"
+              class="avatar"
+            />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -119,7 +107,7 @@ export default {
         title: "",
         cate_id: null,
         content: "",
-        cover_img:'',
+        cover_img: "",
       },
 
       total: 0,
@@ -176,7 +164,7 @@ export default {
       //   this.articleinfobyid.title = res.message.data[0].title
       //   this.articleinfobyid.cate_id = res.message.data[0].cate_id
       //   this.articleinfobyid.content = res.message.data[0].content
-      this.articleinfobyid.cover_img= res.message.data[0].cover_img;
+      this.articleinfobyid.cover_img = res.message.data[0].cover_img;
       console.log(res);
     },
     async delectarticle(id) {
@@ -210,17 +198,15 @@ export default {
     async updatearticle() {
       const articleinfobyid = qs.stringify(this.articleinfobyid);
       const file = this.$refs.upload.uploadFiles;
-      console.log(file)
-
+      console.log(file);
       console.log(this.articleinfobyid.id);
-
       const { data: res } = await this.$http.post(
         "/my/addarticles/updatearticle",
         articleinfobyid
       );
       console.log(res);
     },
-   // 图片上传成功执行的函数
+    // 图片上传成功执行的函数
     handleAvatarSuccess(res, file) {
       this.articleinfobyid.cover_img = URL.createObjectURL(file.raw);
     },

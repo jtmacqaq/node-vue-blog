@@ -10,20 +10,25 @@
     </el-header>
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside>
+      <el-aside :width="iscollapse ? '56px': '200px'">
+        <!-- 点击菜单折叠图标 -->
+        <div class="toggle-button" @click="togglebutton">|||</div>
         <!-- 侧边栏菜单 -->
         <el-menu
           background-color="#333744"
           text-color="#fff"
-          active-text-color="#ffd04b"
+          active-text-color="#409eff"
           router
+          unique-opened
+          :collapse = "iscollapse"
+          :collapse-transition = "false"
         >
           <!-- 一级菜单 -->
           <el-submenu index="1">
             <!-- 一级菜单的模版区域 -->
             <template slot="title">
               <!-- 图标 -->
-              <i class="el-icon-location"></i>
+              <i :class="iconobj[1]"></i>
               <!-- 文本 -->
               <span>个人中心</span>
             </template>
@@ -31,7 +36,7 @@
             <el-menu-item index="/userinfo">
               <template slot="title">
                 <!-- 图标 -->
-                <i class="el-icon-location"></i>
+                <i class="el-icon-s-grid"></i>
                 <!-- 文本 -->
                 <span>基本资料</span>
               </template>
@@ -39,7 +44,7 @@
             <el-menu-item index="1-2">
               <template slot="title">
                 <!-- 图标 -->
-                <i class="el-icon-location"></i>
+                <i class="el-icon-s-grid"></i>
                 <!-- 文本 -->
                 <span>更换头像</span>
               </template>
@@ -47,7 +52,7 @@
             <el-menu-item index="/upload">
               <template slot="title">
                 <!-- 图标 -->
-                <i class="el-icon-location"></i>
+                <i class="el-icon-s-grid"></i>
                 <!-- 文本 -->
                 <span>重置密码</span>
               </template>
@@ -57,7 +62,7 @@
             <!-- 一级菜单的模版区域 -->
             <template slot="title">
               <!-- 图标 -->
-              <i class="el-icon-location"></i>
+              <i :class="iconobj[2]"></i>
               <!-- 文本 -->
               <span>文章管理</span>
             </template>
@@ -65,7 +70,7 @@
             <el-menu-item index="/articlelist">
               <template slot="title">
                 <!-- 图标 -->
-                <i class="el-icon-location"></i>
+                <i class="el-icon-s-grid"></i>
                 <!-- 文本 -->
                 <span>文章类别</span>
               </template>
@@ -73,7 +78,7 @@
             <el-menu-item index="/addarticles">
               <template slot="title">
                 <!-- 图标 -->
-                <i class="el-icon-location"></i>
+                <i class="el-icon-s-grid"></i>
                 <!-- 文本 -->
                 <span>更换头像</span>
               </template>
@@ -81,7 +86,7 @@
             <el-menu-item index="/articlelb">
               <template slot="title">
                 <!-- 图标 -->
-                <i class="el-icon-location"></i>
+                <i class="el-icon-s-grid"></i>
                 <!-- 文本 -->
                 <span>文章列表</span>
               </template>
@@ -103,6 +108,14 @@ export default {
   data() {
     return {
       username: "",
+      //定义一个字体icon对象
+      iconobj:{
+        '1': 'iconfont icon-gerenzhongxin',
+        '2': 'iconfont icon-wenzhangguanli'
+
+      },
+      //定义折叠参数
+      iscollapse:false
     };
   },
 
@@ -113,6 +126,10 @@ export default {
       //跳转到登陆页
       this.$router.push("/login");
     },
+    //菜单栏折叠和展开的函数
+    togglebutton(){
+      this.iscollapse = !this.iscollapse
+    }
   },
 
   created() {},
@@ -153,5 +170,18 @@ export default {
 }
 .el-menu {
   border: none;
+}
+.iconfont{
+  margin-right: 20px;
+}
+.toggle-button{
+  background-color: #4a5064;
+  font-size: 10px;
+  color:#eaedf1;
+  text-align: center;
+  line-height: 24px;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+
 }
 </style>

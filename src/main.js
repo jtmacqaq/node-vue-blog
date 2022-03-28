@@ -12,6 +12,8 @@ import '../public/UE/ueditor.config.js'
 import '../public/UE/ueditor.all.min.js'
 import '../public/UE/lang/zh-cn/zh-cn.js'
 import '../public/UE/ueditor.parse.min.js'
+//导入字体库
+import '../font/iconfont.css'
 Vue.use(ElementUI)
 // axios.defaults.baseURL = '/api'
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
