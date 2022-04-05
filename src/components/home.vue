@@ -3,7 +3,10 @@
     <el-header>
       <img src="@/assets/homelogo.png" />
       <div class="header_left">
-        <p>欢迎，{{ username }}</p>
+            <div class="infoimg">
+      <el-avatar :src="userinfo.user_pic"></el-avatar>
+    </div>
+        <p>欢迎，{{ userinfo.username }}</p>
         <i class="el-icon-switch-button"></i>
         <el-button type="text" @click="logout">退出</el-button>
       </div>
@@ -41,12 +44,12 @@
                 <span>基本资料</span>
               </template>
             </el-menu-item>
-            <el-menu-item index="1-2">
+            <el-menu-item index="/updatepw">
               <template slot="title">
                 <!-- 图标 -->
                 <i class="el-icon-s-grid"></i>
                 <!-- 文本 -->
-                <span>更换头像</span>
+                <span>更改密码</span>
               </template>
             </el-menu-item>
             <el-menu-item index="/upload">
@@ -54,7 +57,7 @@
                 <!-- 图标 -->
                 <i class="el-icon-s-grid"></i>
                 <!-- 文本 -->
-                <span>重置密码</span>
+                <span>上传头像</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -80,7 +83,7 @@
                 <!-- 图标 -->
                 <i class="el-icon-s-grid"></i>
                 <!-- 文本 -->
-                <span>更换头像</span>
+                <span>发布文章</span>
               </template>
             </el-menu-item>
             <el-menu-item index="/articlelb">
@@ -107,7 +110,8 @@ import Userinfo from "./userinfo/userinfo.vue";
 export default {
   data() {
     return {
-      username: "",
+      userinfo:{},
+
       //定义一个字体icon对象
       iconobj:{
         '1': 'iconfont icon-gerenzhongxin',
@@ -120,6 +124,13 @@ export default {
   },
 
   methods: {
+    async getuserinfo(){
+      const {data:res} = await this.$http.get("my/userinfo")
+      if(res.status !== 0) return this.$message.error('获取信息失败')
+      this.userinfo = res.data
+      console.log(this.userinfo)
+
+    },
     logout() {
       //清除token
       window.sessionStorage.clear();
@@ -132,7 +143,9 @@ export default {
     }
   },
 
-  created() {},
+  created() {
+    this.getuserinfo()
+  },
 };
 </script>
 <style scoped>
@@ -161,6 +174,7 @@ export default {
   display: flex;
   color: aliceblue;
   align-items: center;
+  justify-content: center;
 }
 .header_left p {
   margin-right: 20px;
@@ -183,5 +197,9 @@ export default {
   letter-spacing: 0.2em;
   cursor: pointer;
 
+}
+.infoimg{
+  margin-right: 30px;
+  display: flex;
 }
 </style>

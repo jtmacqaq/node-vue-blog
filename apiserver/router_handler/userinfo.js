@@ -1,28 +1,52 @@
 //导入数据库操作模块
 const db = require('../db/index')
 
+//导入user模型
+
+const users = require('../models/user')
+
 // 在头部区域导入 bcryptjs 后，
 // 即可使用 bcrypt.compareSync(提交的密码，数据库中的密码) 方法验证密码是否正确
 // compareSync() 函数的返回值为布尔值，true 表示密码正确，false 表示密码错误
 
 const bcrypt = require('bcryptjs')
-exports.getuserinfo = (req,res) => {
-    console.log(req.user)
-    //定义sql语句
-    const sql = 'select id,username,nickname,email,user_pic from ev_users where id=?'
-    //调用db.query()执行sql语句
-    db.query(sql,req.user.id,(err,results) => {
-        //1.执行sql语句失败
-        if(err) return res.cc(err)
-        // 2. 执行 SQL 语句成功，但是查询到的数据条数不等于 1
-        if(results.length !== 1) return res.cc('获取用户信息失败')
-        //3.将用户信息响应给客户端
+// exports.getuserinfo = (req,res) => {
+//     console.log(req.user)
+//     //定义sql语句
+//     const sql = 'select id,username,nickname,email,user_pic from ev_users where id=?'
+//     //调用db.query()执行sql语句
+//     db.query(sql,req.user.id,(err,results) => {
+//         //1.执行sql语句失败
+//         if(err) return res.cc(err)
+//         // 2. 执行 SQL 语句成功，但是查询到的数据条数不等于 1
+//         if(results.length !== 1) return res.cc('获取用户信息失败')
+//         //3.将用户信息响应给客户端
+//         res.send({
+//             status:0,
+//             message:'获取用户信息成功',
+//             data: results[0],
+//         })
+//     })
+// }
+
+//用sequelize语句操作获取用户信息
+
+exports.getuserinfo = async (req,res) =>{
+
+    const results = await users.findOne({
+        //输出指定的字段，或者说是选择某些属性
+        attributes:['id','username','nickname','email','user_pic'],
+        where:{
+            id:req.user.id
+        }
+    })
         res.send({
             status:0,
             message:'获取用户信息成功',
-            data: results[0],
+            data: results,
         })
-    })
+    
+
 }
 
 //更新用户信息
@@ -46,6 +70,7 @@ exports.updateuserinfo = (req,res) =>{
 exports.updatepassword = (req,res) =>{
     //定义根据id查询用户数据的sql语句
     const sql = 'select * from ev_users where id=?'
+    console.log(req.user.id)
     //执行sql查询用户是否存在
     db.query(sql,req.user.id,(err,results) =>{
         //执行sql语句失败
@@ -66,18 +91,20 @@ exports.updatepassword = (req,res) =>{
             //执行sql语句失败
             if(err) return res.cc(err)
             //判断影响的行数
-            if(results.affectedRows !== 1) return res.cc('更新密码失败')
-            res.cc('更新密码成功')
+            if(results.affectedRows !== 1) return res.cc('更新密码失败',1)
+            res.cc('更新密码成功',0)
         })
     })
 }
 
 //更新头像
 exports.updateavatar = (req,res) =>{
+    console.log(req.file)
+    const avatarUrl = `http://localhost:88/${req.file.filename}`
     //定义更新用户头像的sql语句
     const sql = 'update ev_users set user_pic=? where id=?'
     //调用db.query来执行sql语句
-    db.query(sql,[req.body.avatar,req.user.id],(err,results) =>{
+    db.query(sql,[avatarUrl,req.user.id],(err,results) =>{
         //执行sql语句失败
         if(err) return res.cc(err)
         //执行sql语句成功，但是影响行数不等于1

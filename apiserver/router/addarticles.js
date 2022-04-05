@@ -38,8 +38,7 @@ const upload = multer({storage})
 router.post('/add',upload.single('cover_img'),expressjoi(addarticleschema),addhandler.addarticleshandler)
 
 
-//获取文章列表路由
-router.get('/list',addhandler.getarticlelb)
+
 
 //根据ID删除文章
 router.get('/delete/:id',addhandler.deletearticle)

@@ -8,6 +8,8 @@ import articlelist from '@/components/articlelist'
 import addarticles from '@/components/addarticles'
 import articlelb from '@/components/articlelb'
 import upload from '@/components/upload'
+import updatepw from '@/components/userinfo/updatepw'
+import index from '@/components/qd/index'
 
 Vue.use(VueRouter)
 
@@ -30,13 +32,18 @@ const routes = [
       {path:'/articlelist',component:articlelist},
       {path:'/addarticles',component:addarticles},
       {path:'/articlelb',component:articlelb},
-      {path:'/upload',component:upload}
+      {path:'/upload',component:upload},
+      {path:'/updatepw',component:updatepw}
     ]
   },
   {
     path: '/resuger',
     component:resuger
   },
+  {
+    path: '/index',
+    component:index
+  }
 ]
 
 const router = new VueRouter({
@@ -48,7 +55,7 @@ router.beforeEach((to,from,next) =>{
   //from 代表从哪个路径跳转而来
   // next 是一个函数  表示放行
 
-  if(to.path === '/login' || to.path === '/resuger') return next()
+  if(to.path === '/login' || to.path === '/resuger' || to.path === '/index') return next()
   //获取token
   const tokenstr = window.sessionStorage.getItem('token')
   if(!tokenstr) return next('/login')

@@ -6,27 +6,6 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "629339",
-      "name": "时间",
-      "font_class": "shijian",
-      "unicode": "e64d",
-      "unicode_decimal": 58957
-    },
-    {
-      "icon_id": "3851354",
-      "name": "分类",
-      "font_class": "fenlei",
-      "unicode": "e65c",
-      "unicode_decimal": 58972
-    },
-    {
-      "icon_id": "6204790",
-      "name": "作者",
-      "font_class": "zuozhe",
-      "unicode": "e65d",
-      "unicode_decimal": 58973
-    },
-    {
       "icon_id": "1288646",
       "name": "个人中心",
       "font_class": "gerenzhongxin",

@@ -5,6 +5,9 @@ const express = require('express')
 
 const userhandler = require('../router_handler/user')
 
+//导入路由处理函数
+const  addhandler = require('../router_handler/addarticles')
+
 //创建路由对象
 
 const router = express.Router()
@@ -25,6 +28,9 @@ router.post('/reguser',expressjoi(reg_login_schema),userhandler.reguser)
 //登陆路由
 
 router.post('/login',expressjoi(reg_login_schema),userhandler.login)
+
+//获取文章列表路由
+router.get('/list',addhandler.getarticlelb)
 
 //将路由对象暴露出去
 

@@ -1,38 +1,47 @@
 const sequelize = require('../MysqlConnection')
 const  Sequelize = require('sequelize')
 
-//建立表models
 const users = sequelize.define(
-    //表的名称
-    'ev_article_cate',{
-        id:{
-            field: 'id', //字段名
+    //表名称
+    'ev_users',{
+        id: {
+            field:'id',  //字段名称
             primaryKey:true,
             type:Sequelize.INTEGER(11),
             allowNull:false,
             autoIncrement:true
 
         },
-        name:{
-            field: 'name',
+        username:{
+            field:'username',
+            type:Sequelize.STRING(255),
             allowNull:false,
-            type:Sequelize.STRING(255)
         },
-        alias:{
-            field: 'alias',
+        password:{
+            field:'password',
             type:Sequelize.STRING(255),
             allowNull:false
         },
-        is_delete:{
-            field: 'is_delete',
-            type:Sequelize.TINYINT(1)
+        nickname:{
+            field:'nickname',
+            type:Sequelize.STRING(255),
+            allowNull:true
+        },
+        email:{
+            field:'email',
+            type:Sequelize.STRING(255),
+            allowNull:true
+        },
+        user_pic:{
+            field:'user_pic',
+            type:Sequelize.TEXT,
+            allowNull:true
         }
     },
     {
-        tableName: 'ev_article_cate',//表名字
+        tableName: 'ev_users',//表名字
         timestamps: false,
         freezeTableName:true
-
     }
 )
 users.sync()

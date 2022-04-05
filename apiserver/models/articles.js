@@ -47,7 +47,7 @@ const article = sequelize.define(
             field:'author_id',
             allowNull:false,
             type:Sequelize.INTEGER(11)
-        }
+        },
     },
     {
         tableName: 'ev_article',//表名字

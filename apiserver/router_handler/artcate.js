@@ -1,7 +1,7 @@
 //导入数据库操作模块
 
 const db = require('../db/index')
-const user = require('../models/user')
+const user = require('../models/articlecate')
 const { Op } = require('sequelize')
 exports.getarticlecates = async (req, res) => {
     console.log(req.query)

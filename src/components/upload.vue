@@ -12,30 +12,19 @@
       <i class="el-icon-plus"></i>
     </el-upload>
     <el-button type="success" @click="upload">上传</el-button>
-    <img :src="url" alt v-if="url != null" width="100" height="100" />
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      filedata: "",
-      url: null,
-
-      title: "dd",
-      cate_id: 1,
-      state: "草稿",
-      content: "nihao",
+      filedata:''
     };
   },
   methods: {
     handleUpload(res) {
       let formData = new FormData();
-      formData.append("cover_img", res.file);
-      formData.append("title", this.title);
-      formData.append("cate_id", this.cate_id);
-      formData.append("state", this.state);
-      formData.append("content", this.content);
+      formData.append("avatar", res.file);
       this.filedata = formData;
     },
     async upload() {
@@ -45,13 +34,17 @@ export default {
         },
       };
       const results = await this.$http.post(
-        "/my/addarticles/add",
+        "/my/update/avatar",
         this.filedata,
         config
       );
     //   const { filename, path } = results.data.message.data;
       console.log(results);
-      this.url = results.data.message.img_url;
+      if(results.data.status !== 0){
+        return this.$message.error('上传头像失败')
+      }
+      this.$message.success('上传头像成功')
+      
     },
   },
 };

@@ -225,4 +225,7 @@ export default {
   height: 178px;
   display: block;
 }
+#edui1{
+  width: 100%!important;
+}
 </style>

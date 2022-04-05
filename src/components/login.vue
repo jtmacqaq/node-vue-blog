@@ -41,7 +41,7 @@ export default {
     return {
       loginfrom: {
         username: "admin10",
-        password: "000000",
+        password: "333333",
       },
       //这是表单的验证规则对象
       loginfromrules: {

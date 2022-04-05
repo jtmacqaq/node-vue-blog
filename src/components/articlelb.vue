@@ -136,7 +136,7 @@ export default {
   methods: {
     async getarticlelb() {
       //请求数据
-      const { data: res } = await this.$http.get("/my/addarticles/list", {
+      const { data: res } = await this.$http.get("/api/list", {
         params: this.articlelbinfo,
       });
       console.log(res);
