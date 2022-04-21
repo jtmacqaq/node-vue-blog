@@ -47,5 +47,9 @@ router.get('/delete/:id',addhandler.deletearticle)
 router.get('/articleinfo/:id',addhandler.getarticleinfo)
 
 //根据ID更新文章信息
-router.post('/updatearticle',upload.single('cover_img'),addhandler.updatearticle)
+router.post('/updatearticle',addhandler.updatearticle)
+
+//文章更新，封面上传api
+
+router.post('/uploadimg',upload.single('uploadimg'),addhandler.uploadimg)
 module.exports = router

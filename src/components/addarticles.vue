@@ -10,9 +10,25 @@
         <el-form-item label="标题" prop="title">
           <el-input v-model="addarticleForm.title"></el-input>
         </el-form-item>
-        <el-form-item label="分类" prop="cate_id">
+        <!-- <el-form-item label="分类" prop="cate_id">
           <el-input v-model="addarticleForm.cate_id"></el-input>
+        </el-form-item> -->
+        <el-form-item label="分类" prop="selectcategory">
+          <el-select
+            v-model="category.name"
+            placeholder="请选择"
+            @change="categorych(category.name)"
+          >
+            <el-option
+              v-for="item in category"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
+
         <!-- 文章封面 -->
         <el-form-item label="封面" prop="cover_img">
           <!-- <el-upload
@@ -71,8 +87,24 @@ export default {
         callback();
       }
     };
+    //自定义下拉选择的验证规则
+    const checkselect = (rule,value,callback) =>{
+      if(!this.selectvalue) {
+        callback(new Error('请选择分类'))
+      }else {
+        callback();
+      }
+    }
     return {
+      queryinfo: {
+        page_num: 1,
+        page_size: 7,
+      },
+      category: [],
+      selectcategoryid: null,
       uploaddisabled: false,
+      //自定义下拉选择的验证规则
+      selectvalue:false,
       // dialogImageUrl: "",
       dialogVisible: false,
       msg: "这是 vue-ueditor-wrap ！",
@@ -105,13 +137,14 @@ export default {
         ],
         state: [{ required: true, message: "请选择状态", trigger: "change" }],
         cover_img: [{ required: true, validator: checkimg, trigger: "change" }],
+        selectcategory: [{ required: true, validator: checkselect, trigger: "change" }],
       },
     };
   },
   methods: {
     getUEContent() {
       const file = this.$refs.upload.uploadFiles[0];
-      console.log(file)
+      console.log(file);
       this.$refs.addarticleruleForm.validate(async (valid) => {
         console.log(valid);
         if (!valid) {
@@ -121,7 +154,7 @@ export default {
           const formDate = new FormData();
           formDate.append("cover_img", file.raw);
           formDate.append("title", this.addarticleForm.title);
-          formDate.append("cate_id", this.addarticleForm.cate_id);
+          formDate.append("cate_id", this.selectcategoryid);
           formDate.append("state", this.addarticleForm.state);
           formDate.append("content", this.msg);
           const addarticle = await this.$http.post(
@@ -166,6 +199,24 @@ export default {
       }
       console.log(fileList);
     },
+    //请求分类信息函数
+    async getarticlelist() {
+      const { data: res } = await this.$http.get("/my/article/cates", {
+        params: this.queryinfo,
+      });
+      this.category = res.message.data.rows;
+      console.log(this.category);
+    },
+    categorych(val) {
+      //val 选择的ID
+      this.selectcategoryid = val;
+      if(this.selectcategoryid){
+        this.selectvalue =true
+      }
+    },
+  },
+  created() {
+    this.getarticlelist();
   },
 
   components: {
@@ -225,7 +276,7 @@ export default {
   height: 178px;
   display: block;
 }
-#edui1{
-  width: 100%!important;
+#edui1 {
+  width: 100% !important;
 }
 </style>

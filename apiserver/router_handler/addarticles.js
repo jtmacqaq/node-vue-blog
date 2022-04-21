@@ -115,7 +115,6 @@ exports.updatearticle = async (req,res) =>{
     const results = await articles.update({
         title:req.body.title,
         content:req.body.content,
-        cover_img:`http://localhost:88/${req.file.filename}`,
         cate_id:req.body.cate_id,
         state:req.body.state
     },{
@@ -128,3 +127,17 @@ exports.updatearticle = async (req,res) =>{
 
 }
 
+
+//根据id更新文章图片上传路由函数
+
+exports.uploadimg = async (req,res) =>{
+    const results = await articles.update({
+        cover_img:req.file.filename
+    },{
+        where:{
+            id:req.body.id
+        }
+    })
+    console.log(results)
+    res.cc('更新封面成功',0)
+}
