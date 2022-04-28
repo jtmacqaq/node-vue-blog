@@ -8,7 +8,6 @@
               <el-image
                 style="width: 100px; height: 100px"
                 :src="updateinfolist.user_pic"
-                :fit="fit"
               ></el-image>
           </li>
           <li>

@@ -1,35 +1,29 @@
 <template>
   <div>
-    <div class="header">
-      <div class="nav">
-        <span>jtmac</span>
-        <div class="nav-list">
-          <el-menu
-            :default-active="activeIndex"
-            mode="horizontal"
-            @select="handleSelect"
-          >
-            <el-menu-item index="1">Posts</el-menu-item>
-            <el-menu-item index="2">处理中心</el-menu-item>
-          </el-menu>
-          <ul class="login">
-            <li>Login</li>
-            <li>Register</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <Nav></Nav>
     <div class="container">
       <div class="containerlist">
-        <div class="main" v-for="(item,index) in posts" :key="index">
+        <div class="main" v-for="(item, index) in posts" :key="index">
           <div class="title">
-            <h1>{{item.title}}</h1>
+            <router-link :to="{ path: `/article/${item.id}` }"
+              ><h1>{{ item.title }}</h1></router-link
+            >
           </div>
           <div class="tag">
             <ul class="taglist">
-              <li><i class="iconfont icon-gerenzhongxin"></i>jtmac</li>
-              <li><i class="iconfont icon-shijian"></i>{{item.pub_date }}</li>
-              <li><i class="iconfont icon-wenzhangguanli"></i><a>语文</a></li>
+              <li>
+                <i class="iconfont icon-gerenzhongxin"></i
+                ><router-link :to="{ path: `/user/${item.author_id}` }">{{
+                  item.ev_user.username
+                }}</router-link>
+              </li>
+              <li><i class="iconfont icon-shijian"></i>{{ item.pub_date }}</li>
+              <li>
+                <i class="iconfont icon-wenzhangguanli"></i
+                ><router-link to="/category">{{
+                  item.ev_article_cate.name
+                }}</router-link>
+              </li>
             </ul>
           </div>
           <div class="cover_img">
@@ -43,11 +37,20 @@
         </div>
       </div>
     </div>
+    <el-pagination
+  background
+  layout="prev, pager, next"
+  :total="1000">
+</el-pagination>
   </div>
 </template>
 
 <script>
+import Nav from "./nav.vue";
 export default {
+  components: {
+    Nav,
+  },
   data() {
     return {
       posts: [],
@@ -62,8 +65,8 @@ export default {
       const { data: res } = await this.$http.get("api/list", {
         params: this.articlelbinfo,
       });
-      console.log(res)
-      this.posts = res.message.data.rows
+      console.log(res);
+      this.posts = res.message.data.rows;
     },
   },
   created() {
@@ -139,5 +142,12 @@ export default {
 .Outlinen {
   padding: 25px 0px 25px 0px;
   border-bottom: 1px solid #eeeeee;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+.tag a {
+  color: #909399;
 }
 </style>

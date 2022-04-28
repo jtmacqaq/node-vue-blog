@@ -5,8 +5,8 @@
         <el-table-column prop="title" label="标题"> </el-table-column>
         <el-table-column prop="pub_date" label="发布日期"> </el-table-column>
         <el-table-column prop="state" label="发布状态"> </el-table-column>
-        <el-table-column prop="cate_id" label="分类ID"> </el-table-column>
-        <el-table-column prop="author_id" label="作者ID"> </el-table-column>
+        <el-table-column prop="ev_article_cate.name" label="分类"> </el-table-column>
+        <el-table-column prop="ev_user.username" label="作者"> </el-table-column>
         <el-table-column label="操作">
           <!-- 作用域插槽 -->
           <template slot-scope="scope">
@@ -41,7 +41,6 @@
       title="提示"
       :visible.sync="dialogVisible"
       width="70%"
-      :before-close="handleClose"
     >
       <!-- 内容区 -->
       <el-form
@@ -60,13 +59,14 @@
         <el-form-item label="封面" prop="cover_img">
           <el-upload
             class="avatar-uploader"
-            action="/my/addarticles/updatearticle"
+            action="/my/addarticles/uploadimg"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
             ref="upload"
             :on-remove="handleRemove"
-            :on-change="handleEditChange"
+            :data="{id:articleinfobyid.id}"
+            :headers="uploadheader"
+            name="uploadimg"
           >
             <img
               v-if="articleinfobyid.cover_img"
@@ -108,6 +108,10 @@ export default {
         cate_id: null,
         content: "",
         cover_img: "",
+      },
+      //上传封面图片携带的头部信息
+      uploadheader:{
+        Authorization:window.sessionStorage.getItem('token')
       },
 
       total: 0,
@@ -195,16 +199,19 @@ export default {
     handlePictureCardPreview(file, fileList) {},
     handleRemove(file, fileList) {},
     //更新文章信息函数
-    async updatearticle() {
+     updatearticle() {
       const articleinfobyid = qs.stringify(this.articleinfobyid);
       const file = this.$refs.upload.uploadFiles;
       console.log(file);
       console.log(this.articleinfobyid.id);
+      this.$refs.addarticleruleForm.validate( async (valid)=>{
+        if(!valid) return false
       const { data: res } = await this.$http.post(
         "/my/addarticles/updatearticle",
         articleinfobyid
       );
       console.log(res);
+      })
     },
     // 图片上传成功执行的函数
     handleAvatarSuccess(res, file) {

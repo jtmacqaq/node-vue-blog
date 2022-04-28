@@ -10,6 +10,9 @@ import articlelb from '@/components/articlelb'
 import upload from '@/components/upload'
 import updatepw from '@/components/userinfo/updatepw'
 import index from '@/components/qd/index'
+import article from '@/components/qd/article'
+import category from '@/components/qd/category'
+import user from '@/components/qd/user'
 
 Vue.use(VueRouter)
 
@@ -43,6 +46,18 @@ const routes = [
   {
     path: '/index',
     component:index
+  },
+  {
+    path:'/article/:id',
+    component:article
+  },
+  {
+    path:'/category',
+    component:category
+  },
+  {
+    path:'/user/:id',
+    component:user
   }
 ]
 

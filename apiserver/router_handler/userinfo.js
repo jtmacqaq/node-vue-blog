@@ -3,7 +3,7 @@ const db = require('../db/index')
 
 //导入user模型
 
-const users = require('../models/user')
+const {user} = require('../MysqlConnection')
 
 // 在头部区域导入 bcryptjs 后，
 // 即可使用 bcrypt.compareSync(提交的密码，数据库中的密码) 方法验证密码是否正确
@@ -33,7 +33,7 @@ const bcrypt = require('bcryptjs')
 
 exports.getuserinfo = async (req,res) =>{
 
-    const results = await users.findOne({
+    const results = await user.findOne({
         //输出指定的字段，或者说是选择某些属性
         attributes:['id','username','nickname','email','user_pic'],
         where:{

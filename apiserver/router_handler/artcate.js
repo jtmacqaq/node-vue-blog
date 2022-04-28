@@ -1,7 +1,7 @@
 //导入数据库操作模块
 
 const db = require('../db/index')
-const user = require('../models/articlecate')
+const {user,articlecate}= require('../MysqlConnection')
 const { Op } = require('sequelize')
 exports.getarticlecates = async (req, res) => {
     console.log(req.query)
@@ -13,7 +13,7 @@ exports.getarticlecates = async (req, res) => {
     const page_size = parseInt(req.query.page_size)
     //    const params =[(parseInt(page_num) - 1) * parseInt(page_size), parseInt(page_size)]
     if (!title) {
-        const results = await user.findAndCountAll({
+        const results = await articlecate.findAndCountAll({
             offset: (page_num - 1) * page_size,
             limit: page_size
         })
@@ -26,7 +26,7 @@ exports.getarticlecates = async (req, res) => {
     }
     else {
 
-        const results = await user.findAndCountAll({
+        const results = await articlecate.findAndCountAll({
             where: {
                 //1.精确查询
                 // name: tite
@@ -144,7 +144,7 @@ exports.addarticlecates = (req, res) => {
 //删除文章分类的处理函数
 exports.deletecatebyid = async (req, res) => {
     //定义删除分类的sql语句
-    const results = await user.destroy({
+    const results = await articlecate.destroy({
         where:{
             id:req.params.id
         }
@@ -156,7 +156,7 @@ exports.deletecatebyid = async (req, res) => {
 //根据id获取文章分类信息处理函数
 exports.getarticlebyid = async (req, res) => {
     const id = req.params.id
-    const results = await user.findAll({
+    const results = await articlecate.findAll({
         where: {
             id: id
         }
@@ -173,7 +173,7 @@ exports.getarticlebyid = async (req, res) => {
 //根据id更新文章分类信息处理函数
 exports.updatecatebyid = async (req, res) => {
     //通过查询name和alias查重
-    const results = await user.findAll({
+    const results = await articlecate.findAll({
         where: {
             id: req.body.id,
             [Op.or]: [
@@ -189,7 +189,7 @@ exports.updatecatebyid = async (req, res) => {
     if (results.length === 1 && results[0].name === req.body.name) return res.cc('分类名称被占用，请更换后重试')
     if (results.length === 1 && results[0].alias === req.body.alias) return res.cc('分类别名被占用，请更换后重试')
     //更新文章分类
-    const results1 = await user.update({
+    const results1 = await articlecate.update({
         name:req.body.name,
         alias:req.body.alias
     },{

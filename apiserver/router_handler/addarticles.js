@@ -2,12 +2,18 @@
 const path = require('path')
 const db = require('../db/index')
 //导入文章models
-const articles = require('../models/articles')
+const {articles,articlecate,user,tag,articletag} = require('../MysqlConnection')
 
 //发布文章路由处理函数
 exports.addarticleshandler = async (req,res) =>{
     console.log(req.file.filename)
     console.log(req.file)
+    console.log(req.body.tags)
+    //处理tags的值，如果有中文的逗号都转为英文的
+    const tagstr = req.body.tags.replace(/，/g,',')
+    console.log(tagstr)
+    const tagarry = tagstr.split(',')
+    console.log(tagarry)
     // console.log(req.file.fieldname)
     var formatDateTime = function (date) {  
         var date= new Date(Date.parse(date));
@@ -37,7 +43,8 @@ exports.addarticleshandler = async (req,res) =>{
     //     //文章的作者id
     //     author_id:req.user.id
     // }
-    const results = await articles.create({
+
+    const article = await articles.create({
         title:req.body.title,
         content:req.body.content,
         cover_img:`http://localhost:88/${req.file.filename}`,
@@ -50,6 +57,17 @@ exports.addarticleshandler = async (req,res) =>{
         state:req.body.state
 
     })
+    console.log(article.dataValues.id)
+        // tags标签插入到tag表
+         tagarry.map( (item)=>{
+            tag.create({
+               tagname:item
+           }).then(res=>{
+             article.setTags(res)
+           })
+           
+       })
+    // const results=article.setTags(tags)
     const img_url = `http://localhost:88/${req.file.filename}`
     // const sql = 'insert into ev_article set ?'
     // db.query(sql,articlesinfo,(err,results) =>{
@@ -57,7 +75,7 @@ exports.addarticleshandler = async (req,res) =>{
     //     if(results.affectedRows !== 1) return res.cc('文章发布失败')
     //     res.cc('发布文章成功',0)
     // })
-    console.log(results)
+    // console.log(results)
     res.cc({data:req.file,img_url},0)
 
 }
@@ -70,7 +88,15 @@ exports.getarticlelb = async (req,res) =>{
 
     const results = await articles.findAndCountAll({
         offset: (page_num - 1) * page_size,
-        limit: page_size
+        limit: page_size,
+        include:[{
+            model:articlecate
+        },{
+            model:user,
+            attributes:['username','user_pic']
+        }],
+        //排序，根据发布日期降序
+        order:[['pub_date','desc']]
     })
     res.cc({data:results,page_num,page_size,total:results.count},0)
   
@@ -103,7 +129,17 @@ exports.getarticleinfo = async (req,res) =>{
     const results = await articles.findAll({
         where:{
             id
-        }
+        },
+        include:[{
+            model:articlecate
+        },{
+            model:user,
+            attributes:['username','user_pic']
+        },{
+            model:tag,
+            //隐藏中间关联表
+            through:{attributes:[]}
+        }]
     })
     res.cc({data:results},0)
 }
@@ -132,7 +168,7 @@ exports.updatearticle = async (req,res) =>{
 
 exports.uploadimg = async (req,res) =>{
     const results = await articles.update({
-        cover_img:req.file.filename
+        cover_img:`http://localhost:88/${req.file.filename}`
     },{
         where:{
             id:req.body.id
@@ -140,4 +176,19 @@ exports.uploadimg = async (req,res) =>{
     })
     console.log(results)
     res.cc('更新封面成功',0)
+}
+
+//根据用户ID获取用户下的文章信息
+
+exports.getusertag = async (req,res) =>{
+    const results = await user.findAll({
+        where:{
+            id:req.params.id
+        },
+        include:{
+            model:articles
+        },
+        attributes:['username','user_pic','nickname','email']
+    })
+    res.cc(results,0)
 }

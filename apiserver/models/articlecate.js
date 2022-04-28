@@ -1,6 +1,6 @@
-const sequelize = require('../MysqlConnection')
-const  Sequelize = require('sequelize')
 
+
+module.exports =(DataTypes,sequelize) =>{
 //建立表models
 const articlecate = sequelize.define(
     //表的名称
@@ -8,7 +8,7 @@ const articlecate = sequelize.define(
         id:{
             field: 'id', //字段名
             primaryKey:true,
-            type:Sequelize.INTEGER(11),
+            type:DataTypes.INTEGER(11),
             allowNull:false,
             autoIncrement:true
 
@@ -16,16 +16,16 @@ const articlecate = sequelize.define(
         name:{
             field: 'name',
             allowNull:false,
-            type:Sequelize.STRING(255)
+            type:DataTypes.STRING(255)
         },
         alias:{
             field: 'alias',
-            type:Sequelize.STRING(255),
+            type:DataTypes.STRING(255),
             allowNull:false
         },
         is_delete:{
             field: 'is_delete',
-            type:Sequelize.TINYINT(1)
+            type:DataTypes.TINYINT(1)
         }
     },
     {
@@ -35,5 +35,5 @@ const articlecate = sequelize.define(
 
     }
 )
-articlecate.sync()
-module.exports = articlecate
+return articlecate
+}

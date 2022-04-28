@@ -32,6 +32,14 @@ router.post('/login',expressjoi(reg_login_schema),userhandler.login)
 //获取文章列表路由
 router.get('/list',addhandler.getarticlelb)
 
+
+
+//根据ID获取文章信息
+router.get('/articleinfo/:id',addhandler.getarticleinfo)
+
+
+//根据用户ID获取用户和文章相关信息
+router.get('/usertag/:id',addhandler.getusertag)
 //将路由对象暴露出去
 
 module.exports = router

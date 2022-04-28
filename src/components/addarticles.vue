@@ -28,6 +28,10 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <!-- 文章标签 -->
+        <el-form-item label="文章标签" prop="tags">
+          <el-input v-model="addarticleForm.tags"></el-input>
+        </el-form-item>
 
         <!-- 文章封面 -->
         <el-form-item label="封面" prop="cover_img">
@@ -88,13 +92,13 @@ export default {
       }
     };
     //自定义下拉选择的验证规则
-    const checkselect = (rule,value,callback) =>{
-      if(!this.selectvalue) {
-        callback(new Error('请选择分类'))
-      }else {
+    const checkselect = (rule, value, callback) => {
+      if (!this.selectvalue) {
+        callback(new Error("请选择分类"));
+      } else {
         callback();
       }
-    }
+    };
     return {
       queryinfo: {
         page_num: 1,
@@ -104,7 +108,7 @@ export default {
       selectcategoryid: null,
       uploaddisabled: false,
       //自定义下拉选择的验证规则
-      selectvalue:false,
+      selectvalue: false,
       // dialogImageUrl: "",
       dialogVisible: false,
       msg: "这是 vue-ueditor-wrap ！",
@@ -120,6 +124,7 @@ export default {
         cate_id: null,
         state: "",
         content: "",
+        tags: "",
       },
       imglist: false,
       addarticlerules: {
@@ -137,7 +142,9 @@ export default {
         ],
         state: [{ required: true, message: "请选择状态", trigger: "change" }],
         cover_img: [{ required: true, validator: checkimg, trigger: "change" }],
-        selectcategory: [{ required: true, validator: checkselect, trigger: "change" }],
+        selectcategory: [
+          { required: true, validator: checkselect, trigger: "change" },
+        ],
       },
     };
   },
@@ -157,6 +164,7 @@ export default {
           formDate.append("cate_id", this.selectcategoryid);
           formDate.append("state", this.addarticleForm.state);
           formDate.append("content", this.msg);
+          formDate.append("tags",this.addarticleForm.tags)
           const addarticle = await this.$http.post(
             "/my/addarticles/add",
             formDate,
@@ -210,8 +218,8 @@ export default {
     categorych(val) {
       //val 选择的ID
       this.selectcategoryid = val;
-      if(this.selectcategoryid){
-        this.selectvalue =true
+      if (this.selectcategoryid) {
+        this.selectvalue = true;
       }
     },
   },

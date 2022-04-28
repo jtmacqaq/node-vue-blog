@@ -43,8 +43,7 @@ router.post('/add',upload.single('cover_img'),expressjoi(addarticleschema),addha
 //根据ID删除文章
 router.get('/delete/:id',addhandler.deletearticle)
 
-//根据ID获取文章信息
-router.get('/articleinfo/:id',addhandler.getarticleinfo)
+
 
 //根据ID更新文章信息
 router.post('/updatearticle',addhandler.updatearticle)

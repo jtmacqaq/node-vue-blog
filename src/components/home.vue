@@ -1,11 +1,11 @@
 <template>
   <el-container class="elcontainer">
     <el-header>
-      <img src="@/assets/homelogo.png" />
+      <span class="adminlogo">jtmac</span>
       <div class="header_left">
-            <div class="infoimg">
-      <el-avatar :src="userinfo.user_pic"></el-avatar>
-    </div>
+        <div class="infoimg">
+          <el-avatar :src="userinfo.user_pic"></el-avatar>
+        </div>
         <p>欢迎，{{ userinfo.username }}</p>
         <i class="el-icon-switch-button"></i>
         <el-button type="text" @click="logout">退出</el-button>
@@ -13,7 +13,7 @@
     </el-header>
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside :width="iscollapse ? '56px': '200px'">
+      <el-aside :width="iscollapse ? '56px' : '200px'">
         <!-- 点击菜单折叠图标 -->
         <div class="toggle-button" @click="togglebutton">|||</div>
         <!-- 侧边栏菜单 -->
@@ -23,8 +23,8 @@
           active-text-color="#409eff"
           router
           unique-opened
-          :collapse = "iscollapse"
-          :collapse-transition = "false"
+          :collapse="iscollapse"
+          :collapse-transition="false"
         >
           <!-- 一级菜单 -->
           <el-submenu index="1">
@@ -110,26 +110,24 @@ import Userinfo from "./userinfo/userinfo.vue";
 export default {
   data() {
     return {
-      userinfo:{},
+      userinfo: {},
 
       //定义一个字体icon对象
-      iconobj:{
-        '1': 'iconfont icon-gerenzhongxin',
-        '2': 'iconfont icon-wenzhangguanli'
-
+      iconobj: {
+        1: "iconfont icon-gerenzhongxin",
+        2: "iconfont icon-wenzhangguanli",
       },
       //定义折叠参数
-      iscollapse:false
+      iscollapse: false,
     };
   },
 
   methods: {
-    async getuserinfo(){
-      const {data:res} = await this.$http.get("my/userinfo")
-      if(res.status !== 0) return this.$message.error('获取信息失败')
-      this.userinfo = res.data
-      console.log(this.userinfo)
-
+    async getuserinfo() {
+      const { data: res } = await this.$http.get("my/userinfo");
+      if (res.status !== 0) return this.$message.error("获取信息失败");
+      this.userinfo = res.data;
+      console.log(this.userinfo);
     },
     logout() {
       //清除token
@@ -138,13 +136,13 @@ export default {
       this.$router.push("/login");
     },
     //菜单栏折叠和展开的函数
-    togglebutton(){
-      this.iscollapse = !this.iscollapse
-    }
+    togglebutton() {
+      this.iscollapse = !this.iscollapse;
+    },
   },
 
   created() {
-    this.getuserinfo()
+    this.getuserinfo();
   },
 };
 </script>
@@ -185,21 +183,26 @@ export default {
 .el-menu {
   border: none;
 }
-.iconfont{
+.iconfont {
   margin-right: 20px;
 }
-.toggle-button{
+.toggle-button {
   background-color: #4a5064;
   font-size: 10px;
-  color:#eaedf1;
+  color: #eaedf1;
   text-align: center;
   line-height: 24px;
   letter-spacing: 0.2em;
   cursor: pointer;
-
 }
-.infoimg{
+.infoimg {
   margin-right: 30px;
   display: flex;
+}
+.adminlogo {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: bold;
+  color: white;
 }
 </style>
