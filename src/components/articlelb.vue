@@ -151,18 +151,20 @@ export default {
     },
     //每页多少条
     handleSizeChange(newsize) {
+      console.log(newsize)
       this.articlelbinfo.page_size = newsize;
       this.getarticlelb();
     },
     //当前页
     handleCurrentChange(newnum) {
+      console.log(newnum)
       this.articlelbinfo.page_num = newnum;
       this.getarticlelb();
     },
     async editarticle(id) {
       this.dialogVisible = true;
       const { data: res } = await this.$http.get(
-        "/my/addarticles/articleinfo/" + id
+        "/api/articleinfo/" + id
       );
       this.articleinfobyid = res.message.data[0];
       //   this.articleinfobyid.title = res.message.data[0].title

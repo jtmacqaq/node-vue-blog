@@ -2,7 +2,7 @@
 const path = require('path')
 const db = require('../db/index')
 //导入文章models
-const {articles,articlecate,user,tag,articletag} = require('../MysqlConnection')
+const {articles,articlecate,user,tag,articletag,comments} = require('../MysqlConnection')
 
 //发布文章路由处理函数
 exports.addarticleshandler = async (req,res) =>{
@@ -139,6 +139,8 @@ exports.getarticleinfo = async (req,res) =>{
             model:tag,
             //隐藏中间关联表
             through:{attributes:[]}
+        },{
+            model:comments
         }]
     })
     res.cc({data:results},0)

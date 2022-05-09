@@ -18,6 +18,14 @@ module.exports = {
             //     //     '^/api': '',  
             //     // }
             },
+            '/comment': {
+                target: 'http://localhost:88/',    // 你自己的api接口地址
+                changeOrigin: true,
+                ws: true,
+            //     // pathRewrite: {
+            //     //     '^/api': '',  
+            //     // }
+            },
         }
     }
 };

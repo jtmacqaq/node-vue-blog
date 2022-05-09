@@ -91,6 +91,7 @@ module.exports.login = (req,res) =>{
             return res.cc('密码错误')
 
         }
+        const uid = results[0].id
         //生成token
         const user = {...results[0],password:'',user_pic:''}
         //对用户的信息进行加密，生成token
@@ -99,7 +100,8 @@ module.exports.login = (req,res) =>{
         res.send({
             status:0,
             messages:'登录成功',
-            token: 'Bearer ' + tokenstr
+            token: 'Bearer ' + tokenstr,
+            uid
         })
 
     })

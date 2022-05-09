@@ -8,6 +8,8 @@ const userhandler = require('../router_handler/user')
 //导入路由处理函数
 const  addhandler = require('../router_handler/addarticles')
 
+const  commentshandler = require('../router_handler/comments')
+
 //创建路由对象
 
 const router = express.Router()
@@ -41,5 +43,6 @@ router.get('/articleinfo/:id',addhandler.getarticleinfo)
 //根据用户ID获取用户和文章相关信息
 router.get('/usertag/:id',addhandler.getusertag)
 //将路由对象暴露出去
-
+//根据文章ID获取文章的评论
+router.get('/commentslist',commentshandler.getcommentslist)
 module.exports = router

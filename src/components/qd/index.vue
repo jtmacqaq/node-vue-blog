@@ -37,11 +37,15 @@
         </div>
       </div>
     </div>
-    <el-pagination
-  background
-  layout="prev, pager, next"
-  :total="1000">
-</el-pagination>
+    <div class="paging">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="total"
+        @current-change="handleCurrentChange"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -58,6 +62,7 @@ export default {
         page_num: 1,
         page_size: 10,
       },
+      total: null,
     };
   },
   methods: {
@@ -67,6 +72,12 @@ export default {
       });
       console.log(res);
       this.posts = res.message.data.rows;
+      this.total = res.message.total;
+    },
+    handleCurrentChange(newnum) {
+      console.log(newnum);
+      this.articlelbinfo.page_num = newnum;
+      this.getposts();
     },
   },
   created() {
@@ -149,5 +160,10 @@ a {
 }
 .tag a {
   color: #909399;
+}
+.paging{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
 }
 </style>

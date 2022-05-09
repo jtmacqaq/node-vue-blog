@@ -42,7 +42,8 @@ const userrouter = require('./router/user')
 const artcaterouter = require('./router/artcate')
 //导入新增文章内容路由模块
 const addarticles = require('./router/addarticles')
-
+//导入文章评论的路由模块
+const commentsrouter = require('./router/comments')
 //一定要在路由之前，封装res.cc函数,全局中间件
 
 app.use((req,res,next) =>{
@@ -80,6 +81,10 @@ app.use('/my',userinfo)
 app.use('/my/article',artcaterouter)
 //注册新增文章路由为全局路由模块
 app.use('/my/addarticles',addarticles)
+
+//注册文章评论的路由为全局路由模块
+
+app.use('/comment',commentsrouter)
 
 
 

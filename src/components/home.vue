@@ -132,6 +132,8 @@ export default {
     logout() {
       //清除token
       window.sessionStorage.clear();
+      //清除用户ID
+      window.localStorage.clear();
       //跳转到登陆页
       this.$router.push("/login");
     },

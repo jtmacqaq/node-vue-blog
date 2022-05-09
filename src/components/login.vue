@@ -82,6 +82,8 @@ export default {
         this.$message.success("登陆成功");
         //将token保存在sessionStorage中
         window.sessionStorage.setItem("token", res.token);
+        window.localStorage.setItem('uid',res.uid)
+        window.localStorage.setItem('nid',res.token)
         //然后跳转到后台主页,路由地址为/home
         this.$router.push("/home");
       });
