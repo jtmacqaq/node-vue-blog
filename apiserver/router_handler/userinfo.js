@@ -110,6 +110,6 @@ exports.updateavatar = (req,res) =>{
         //执行sql语句成功，但是影响行数不等于1
         if(results.affectedRows !==1) return res.cc('更新头像失败')
         //更新用户头像成功
-        res.cc('更新用户头像成功',0)
+        res.cc(avatarUrl,0)
     })
 }

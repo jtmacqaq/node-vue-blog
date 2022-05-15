@@ -4,7 +4,8 @@
       <span class="adminlogo">jtmac</span>
       <div class="header_left">
         <div class="infoimg">
-          <el-avatar :src="userinfo.user_pic"></el-avatar>
+          <el-avatar :src="$store.state.userinfo.user_pic"></el-avatar>
+  
         </div>
         <p>欢迎，{{ userinfo.username }}</p>
         <i class="el-icon-switch-button"></i>
@@ -100,6 +101,7 @@
 
       <el-main>
         <router-view></router-view>
+               {{$store.state.userinfo.avart}}
       </el-main>
     </el-container>
   </el-container>
@@ -128,7 +130,9 @@ export default {
       if (res.status !== 0) return this.$message.error("获取信息失败");
       this.userinfo = res.data;
       console.log(this.userinfo);
+      this.$store.commit('getiusernfo', this.userinfo)
     },
+
     logout() {
       //清除token
       window.sessionStorage.clear();

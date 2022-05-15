@@ -26,6 +26,22 @@ module.exports = {
             //     //     '^/api': '',  
             //     // }
             },
+            '/category': {
+                target: 'http://localhost:88/',    // 你自己的api接口地址
+                changeOrigin: true,
+                ws: true,
+            //     // pathRewrite: {
+            //     //     '^/api': '',  
+            //     // }
+            },
+            '/like': {
+                target: 'http://localhost:88/',    // 你自己的api接口地址
+                changeOrigin: true,
+                ws: true,
+            //     // pathRewrite: {
+            //     //     '^/api': '',  
+            //     // }
+            },
         }
     }
 };

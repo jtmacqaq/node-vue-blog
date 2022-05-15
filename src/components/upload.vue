@@ -44,6 +44,7 @@ export default {
         return this.$message.error('上传头像失败')
       }
       this.$message.success('上传头像成功')
+      this.$store.commit('updateimg', results.data.message)
       
     },
   },

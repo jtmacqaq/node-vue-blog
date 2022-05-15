@@ -87,6 +87,9 @@ exports.getarticlelb = async (req,res) =>{
     const page_size = parseInt(req.query.page_size)  //每页显示的数量
 
     const results = await articles.findAndCountAll({
+        where:{
+            state:'已发布'
+        },
         offset: (page_num - 1) * page_size,
         limit: page_size,
         include:[{

@@ -8,9 +8,9 @@
     <el-form-item label="密码" prop="password">
     <el-input v-model="form.password"></el-input>
   </el-form-item>
-  <el-from-item class="resuger_button">
+  <el-form-item class="resuger_button">
     <el-button type="primary" @click="resugerclick">注册</el-button>
- </el-from-item>
+ </el-form-item>
 </el-form>
 </div>
 
@@ -47,7 +47,7 @@ export default {
                 if(!valid) return
                 const {data:res} = await this.$http.post('api/reguser',form)
                 if(res.status !== 0) {
-                    return this.$message.error('注册失败')
+                    return this.$message.error(res.message)
                 }
                 this.$message.success('注册成功，请登陆')
                 this.$router.push('/login')

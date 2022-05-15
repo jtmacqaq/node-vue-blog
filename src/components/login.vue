@@ -26,10 +26,10 @@
           ></el-input>
         </el-form-item>
         <!-- 按钮 -->
-        <el-from-item class="login_button">
+        <el-form-item class="login_button">
           <el-button type="primary" @click="login">登陆</el-button>
           <el-button type="info" @click="reguser">注册</el-button>
-        </el-from-item>
+        </el-form-item>
       </el-form>
     </div>
   </div>

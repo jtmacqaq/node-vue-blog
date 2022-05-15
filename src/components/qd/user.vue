@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Nav></Nav>
+    <navbar></navbar>
     <div class="container">
       <el-card class="box-card">
         <div class="useravatar">
@@ -36,10 +36,10 @@
   </div>
 </template>
 <script>
-import Nav from "./nav.vue";
+import navbar from "./navbar.vue";
 export default {
   components: {
-    Nav,
+    navbar,
   },
   data() {
     return {
@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     async getusertag() {
-      //获取调整过来路由的ID，也就是作者的ID
+      //获取跳转过来路由的ID，也就是作者的ID
       const id = this.$route.params.id;
       const { data: res } = await this.$http.get("/api/usertag/" + id);
       console.log(res);

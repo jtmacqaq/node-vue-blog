@@ -1,16 +1,17 @@
 <template>
   <div>
-    <Nav></Nav>
+    <navbar></navbar>
     <!-- 文章详情 -->
     <div class="container">
       <el-card>
         <h1 class="articletitle">{{ article.title }}</h1>
         <div class="articletag">
-          <el-avatar :src="article.ev_user.user_pic" :size="large"></el-avatar>
+          <el-avatar :src="article.ev_user.user_pic"></el-avatar>
           <div class="articletaglist">
             <div>{{ article.ev_user.username }}</div>
             <div>{{ article.pub_date }}</div>
             <div>{{ article.ev_article_cate.name }}</div>
+            <div @click="like"><i class="iconfont icon-xihuan"></i>{{likenum}}</div>
           </div>
         </div>
 
@@ -43,11 +44,6 @@
                 <el-avatar
                   :src="item.ev_user.user_pic"
                   class="userlogo"
-                  v-if="item.ev_user.user_pic"
-                />
-                <el-avatar
-                  src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%253A%252F%252Fdingyue.ws.126.net%252F2021%252F0629%252Fb726314dj00qvg8ac004mc000u000u0c.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1653967840&t=1aa5923bec01d1b394e6abf28808af12"
-                  v-else
                 />
               </div>
               <div class="commentszj">
@@ -83,11 +79,6 @@
                   <el-avatar
                     :src="item2.ev_user.user_pic"
                     class="userlogo"
-                    v-if="item2.ev_user.user_pic"
-                  />
-                  <el-avatar
-                    src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%253A%252F%252Fdingyue.ws.126.net%252F2021%252F0629%252Fb726314dj00qvg8ac004mc000u000u0c.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1653967840&t=1aa5923bec01d1b394e6abf28808af12"
-                    v-else
                   />
                 </div>
                 <div class="commentszj">
@@ -104,10 +95,10 @@
 </template>
 <script>
 import qs from "qs";
-import Nav from "./nav.vue";
+import navbar from "./navbar.vue";
 export default {
   components: {
-    Nav,
+    navbar,
   },
   data() {
     return {
@@ -120,8 +111,8 @@ export default {
         from_uid: null,
         content: "",
       },
-      replycomment:{
-             post_id: null,
+      replycomment: {
+        post_id: null,
         from_uid: null,
         content: "",
         parent_id: null,
@@ -129,6 +120,11 @@ export default {
       commentslist: [],
       replylist: [],
       replyid: null,
+      likeinfo:{
+        post_id:null,
+        from_uid:null
+      },
+      likenum:null
     };
   },
   methods: {
@@ -181,30 +177,54 @@ export default {
       this.getcommentslist();
     },
     //回复评论
-     replycomments(commentid) {
+    replycomments(commentid) {
       this.replyid = commentid;
- 
     },
     async postreply(commentid) {
-        this.replycomment.post_id = this.$route.params.id;
+      this.replycomment.post_id = this.$route.params.id;
       this.replycomment.from_uid = window.localStorage.getItem("uid");
-           this.replycomment.parent_id = commentid;
+      this.replycomment.parent_id = commentid;
       const replycomment = qs.stringify(this.replycomment);
       const { data: res } = await this.$http.post(
         "/comment/replycomments",
         replycomment
       );
-      console.log(res)
-      if(res.status !== 0) this.$message.error('评论失败')
-      this.$message.success('评论成功')
-      this.replyid = null
+      console.log(res);
+      if (res.status !== 0) this.$message.error("评论失败");
+      this.$message.success("评论成功");
+      this.replyid = null;
       this.getcommentslist();
     },
+
+    //文章点赞（喜欢）函数
+    async like(){
+
+       this.likeinfo.post_id = this.$route.params.id
+       this.likeinfo.from_uid = window.localStorage.getItem('uid')
+       const likeinfo = qs.stringify(this.likeinfo)
+       console.log(likeinfo)  
+       if(!window.localStorage.getItem('nid')){
+         return this.$message.error('请登陆后点赞👍')
+       }
+      const {data:res} = await this.$http.post('/like/like',likeinfo)
+      if(res.status !==0 ) return this.$message.error(res.message)
+      this.$message.success('点赞成功')
+      this.getlikenum()
+    },
+    //获取文章点赞数量
+    async getlikenum(){
+
+      const {data:res} =await this.$http.get(`/api/likenum/${this.$route.params.id}`)
+      this.likenum = res.message
+      console.log(this.likenum)
+    }
+
   },
   mounted() {},
   created() {
     this.getarticle();
     this.getcommentslist();
+    this.getlikenum()
   },
 };
 </script>

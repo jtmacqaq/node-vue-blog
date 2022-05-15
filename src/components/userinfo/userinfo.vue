@@ -7,7 +7,7 @@
             <span>Avatar</span>
               <el-image
                 style="width: 100px; height: 100px"
-                :src="updateinfolist.user_pic"
+                :src="$store.state.userinfo.user_pic"
               ></el-image>
           </li>
           <li>
@@ -15,7 +15,7 @@
             <div class="inforight">
               <el-input
                 class="usernameinput"
-                v-model="updateinfolist.username"
+                v-model="$store.state.userinfo.username"
                 ref="Nameref"
                 disabled
               ></el-input>
@@ -26,7 +26,7 @@
             <div class="inforight">
               <el-input
                 class="usernameinput"
-                v-model="updateinfolist.email"
+                v-model="$store.state.userinfo.email"
                 ref="Emailref"
               ></el-input>
               <i class="el-icon-edit" @click="emailclick"></i>
@@ -35,7 +35,7 @@
           <li>
             <span>Nickname</span>
             <div class="inforight">
-              <el-input class="usernameinput" v-model="updateinfolist.nickname" ref="nickref">
+              <el-input class="usernameinput" v-model="$store.state.userinfo.nickname" ref="nickref">
               </el-input>
               <i class="el-icon-edit" @click="nickclick"></i>
             </div>
@@ -65,9 +65,9 @@ export default {
       const { data: res } = await this.$http.get("my/userinfo");
       console.log(res);
       if (res.status !== 0) return this.$message.error(res.message);
-      this.updateinfolist = res.data
+      this.$store.commit('getiusernfo',res.data) 
     },
-    //
+    
     nickclick() {
       this.$refs.nickref.select();
     },
@@ -79,7 +79,9 @@ export default {
     },
     //更新用户信息函数
     async updateinfo(){
-      const updateinfolist = qs.stringify(this.updateinfolist)
+      // console.log(this.$store.state.userinfo)
+      const updateinfolist = qs.stringify(this.$store.state.userinfo)
+      console.log(updateinfolist)
 
       const {data:res} = await this.$http.post('my/updateuserinfo',updateinfolist)
       if(res.status !== 0) return this.$message.error('更新失败')

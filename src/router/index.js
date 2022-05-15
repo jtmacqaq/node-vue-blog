@@ -13,6 +13,8 @@ import index from '@/components/qd/index'
 import article from '@/components/qd/article'
 import category from '@/components/qd/category'
 import user from '@/components/qd/user'
+//ceshi的路由
+import ceshi from '@/components/ceshi'
 
 Vue.use(VueRouter)
 
@@ -36,7 +38,8 @@ const routes = [
       {path:'/addarticles',component:addarticles},
       {path:'/articlelb',component:articlelb},
       {path:'/upload',component:upload},
-      {path:'/updatepw',component:updatepw}
+      {path:'/updatepw',component:updatepw},
+      {path:'/ceshi',component:ceshi}
     ]
   },
   {
@@ -52,17 +55,18 @@ const routes = [
     component:article
   },
   {
-    path:'/category',
+    path:'/category/:id',
     component:category
   },
   {
     path:'/user/:id',
     component:user
-  }
+  },
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode:'history'//去掉URL中的#
 })
 //挂载路由导航守卫
 // router.beforeEach((to,from,next) =>{

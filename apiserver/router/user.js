@@ -9,6 +9,7 @@ const userhandler = require('../router_handler/user')
 const  addhandler = require('../router_handler/addarticles')
 
 const  commentshandler = require('../router_handler/comments')
+const likehandler = require('../router_handler/like')
 
 //创建路由对象
 
@@ -45,4 +46,8 @@ router.get('/usertag/:id',addhandler.getusertag)
 //将路由对象暴露出去
 //根据文章ID获取文章的评论
 router.get('/commentslist',commentshandler.getcommentslist)
+
+//获取点赞数
+
+router.get('/likenum/:id',likehandler.likenumhandler)
 module.exports = router

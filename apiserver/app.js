@@ -44,6 +44,11 @@ const artcaterouter = require('./router/artcate')
 const addarticles = require('./router/addarticles')
 //导入文章评论的路由模块
 const commentsrouter = require('./router/comments')
+//导入分类路由的模块
+const categoryrouter = require('./router/category')
+
+//导入喜欢路由模块
+const likerouter = require('./router/like')
 //一定要在路由之前，封装res.cc函数,全局中间件
 
 app.use((req,res,next) =>{
@@ -86,7 +91,12 @@ app.use('/my/addarticles',addarticles)
 
 app.use('/comment',commentsrouter)
 
+//注册分类路由为全局路由模块
+app.use('/category',categoryrouter)
 
+//注册喜欢路由为全局路由模块
+
+app.use('/like',likerouter)
 
 //定义错误级别的中间件
 

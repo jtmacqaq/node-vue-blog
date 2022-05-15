@@ -6,6 +6,7 @@ const articlemodel = require('./models/articles')
 const articlecatemodel = require('./models/articlecate')
 const commentsmodel = require('./models/comments')
 const replymodel = require('./models/reply')
+const likemodel = require('./models/like')
 //创建sequelize实例
 const sequelize = new Sequelize(
     'my_db-01',
@@ -35,6 +36,7 @@ const articles = articlemodel(Sequelize,sequelize)
 const articlecate = articlecatemodel(Sequelize,sequelize)
 const comments = commentsmodel(Sequelize,sequelize)
 const reply = replymodel(Sequelize,sequelize)
+const like = likemodel(Sequelize,sequelize)
 
 //联表关系
 //1.一篇文章对应一个分类
@@ -85,6 +87,14 @@ comments.hasMany(reply,{
 reply.belongsTo(comments,{
     foreignKey:'parent_id'
 })
+
+// //文章和点赞的关系
+// articles.hasMany(like,{
+//     foreignKey:'post_id'
+// })
+// like.belongsTo(articles,{
+//     foreignKey:'post_id'
+// })
 sequelize.sync()
 module.exports = {
     tag,
@@ -93,5 +103,6 @@ module.exports = {
     articles,
     articlecate,
     comments,
-    reply
+    reply,
+    like
 }
