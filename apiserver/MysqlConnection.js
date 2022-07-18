@@ -7,6 +7,10 @@ const articlecatemodel = require('./models/articlecate')
 const commentsmodel = require('./models/comments')
 const replymodel = require('./models/reply')
 const likemodel = require('./models/like')
+const rolesmodel = require('./models/role')
+const routesmodel = require('./models/routes')
+const routesrolemodel = require('./models/routes_role')
+const user_role_model = require('./models/user_role')
 //创建sequelize实例
 const sequelize = new Sequelize(
     'my_db-01',
@@ -37,6 +41,10 @@ const articlecate = articlecatemodel(Sequelize,sequelize)
 const comments = commentsmodel(Sequelize,sequelize)
 const reply = replymodel(Sequelize,sequelize)
 const like = likemodel(Sequelize,sequelize)
+const role = rolesmodel(Sequelize,sequelize)
+const route = routesmodel(Sequelize,sequelize)
+const routes_role = routesrolemodel(Sequelize,sequelize)
+const user_role = user_role_model(Sequelize,sequelize)
 
 //联表关系
 //1.一篇文章对应一个分类
@@ -88,6 +96,33 @@ reply.belongsTo(comments,{
     foreignKey:'parent_id'
 })
 
+//用户和角色的关系
+user.belongsToMany(role,{
+    through:{
+        model:user_role
+    },
+    foreignKey:'userid'
+})
+role.belongsToMany(user,{
+    through:{
+        model:user_role
+    },
+    foreignKey:'roleid'
+})
+
+//角色和路由多对多的关系
+role.belongsToMany(route,{
+    through:{
+        model:routes_role
+    },
+    foreignKey:'roleid'
+})
+route.belongsToMany(role,{
+    through:{
+        model:routes_role
+    },
+    foreignKey:'routesid'
+})
 // //文章和点赞的关系
 // articles.hasMany(like,{
 //     foreignKey:'post_id'
@@ -104,5 +139,9 @@ module.exports = {
     articlecate,
     comments,
     reply,
-    like
+    like,
+    role,
+    route,
+    routes_role,
+    user_role
 }

@@ -1,7 +1,6 @@
 <template>
   <div>
-      {{$store.state.userinfo.username}}
-        <button @click="updateinfo">修改信息</button>
+      ceshi
   </div>
 
 </template>
@@ -12,11 +11,6 @@ export default {
             
         }
     },
-    methods:{
-        updateinfo(){
-            this.$store.dispatch('aupdate')
-        }
-    }
 };
 </script>
 <style>

@@ -2,7 +2,7 @@
 
 const db = require('../db/index')
 
-
+const {role,route,user,user_role,routes_role} = require('../MysqlConnection')
 //导入bcryptjs这个包，对密码加密
 
 const bcrypt = require('bcryptjs')
@@ -59,7 +59,24 @@ exports.reguser = (req,res) =>{
         }
 
         //注册成功
+        const sql = 'select id from ev_users where username=?'
+        db.query(sql,userinfo.username,async (err,results1) =>{
+            if(err){
+                return res.cc(err)
+            }
+            if(results1.length === 0){
+                return res.cc('没找到相关数据')
+            }
+            console.log(results1[0].id)
 
+            //创建用户的角色信息
+            // const rolesql = await role.create({
+            //     user_role_id:results1[0].id,
+            //     rolename:'游客'
+            // })
+
+
+        })
         // res.send({status:0,message:'注册成功'})
         res.cc('注册成功',0)
 
@@ -75,7 +92,7 @@ module.exports.login = (req,res) =>{
     //定义sql语句
     const sql = 'select * from ev_users where username=?'
     //执行sql语句，根据用户名查询用户的信息
-    db.query(sql,userinfo.username,(err,results) =>{
+    db.query(sql,userinfo.username,async (err,results) =>{
         //1.查询失败
         if(err){
             return res.cc(err)
@@ -93,15 +110,45 @@ module.exports.login = (req,res) =>{
         }
         const uid = results[0].id
         //生成token
-        const user = {...results[0],password:'',user_pic:''}
+        const userxinxi = {...results[0],password:'',user_pic:''}
         //对用户的信息进行加密，生成token
-        const tokenstr = jwt.sign(user,config.jwtSecretKey,{expiresIn:config.expiresIn})
+        const tokenstr = jwt.sign(userxinxi,config.jwtSecretKey,{expiresIn:config.expiresIn})
+        const roleinfo = await user_role.findAll({
+            where:{
+                userid:uid
+            },
+            raw:true,
+            attributes:['roleid']
+        })
+        //处理roleinfo数组
+        const rolestring = []
+        roleinfo.map(item =>{
+            rolestring.push(item.roleid)
+        })
+        console.log(rolestring)
+        const routeid = await routes_role.findAll({
+            where:{
+                roleid:rolestring
+            },
+            raw:true
+        })
+        console.log(routeid)
+        const routestring = []
+        routeid.map(item =>{
+            routestring.push(item.routesid)
+        })
+        const routes = await route.findAll({
+            where:{
+                id:routestring
+            }
+        })
         console.log(tokenstr)
         res.send({
             status:0,
             messages:'登录成功',
             token: 'Bearer ' + tokenstr,
-            uid
+            uid,
+            routes
         })
 
     })

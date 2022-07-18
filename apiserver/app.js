@@ -33,6 +33,10 @@ app.use(express.urlencoded({extended:false}))
 //托管静态资源
 
 app.use(express.static(path.join(__dirname,'./uploads')));
+
+//处理json数据
+
+app.use(express.json())
 //导入路由模块
 
 const userrouter = require('./router/user')
@@ -46,9 +50,14 @@ const addarticles = require('./router/addarticles')
 const commentsrouter = require('./router/comments')
 //导入分类路由的模块
 const categoryrouter = require('./router/category')
-
+//导入角色路由的模块
+const rolerouter = require('./router/role')
 //导入喜欢路由模块
 const likerouter = require('./router/like')
+
+//导入菜单管理模块
+
+const navrouter = require('./router/route')
 //一定要在路由之前，封装res.cc函数,全局中间件
 
 app.use((req,res,next) =>{
@@ -98,6 +107,9 @@ app.use('/category',categoryrouter)
 
 app.use('/like',likerouter)
 
+app.use('/role',rolerouter)
+
+app.use('/nav',navrouter)
 //定义错误级别的中间件
 
 app.use((err,req,res,next) =>{

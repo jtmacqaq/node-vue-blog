@@ -25,10 +25,12 @@ const expressjoi = require('@escook/express-joi')
 //导入需要验证规则的对象
 
 const  { updateschema,updatepwdschema,updateavatar} = require('../schema/user')
-
 //获取用户的基本信息
 
 router.get('/userinfo',userinfohandler.getuserinfo)
+
+//获取全部用户列表
+router.get('/userinfolist',userinfohandler.getuserinfolist)
 
 //更新用户的基本信息
 router.post('/updateuserinfo',expressjoi(updateschema),userinfohandler.updateuserinfo)
@@ -44,6 +46,8 @@ router.post('/updatepwd',expressjoi(updatepwdschema),userinfohandler.updatepassw
 //将文本类型的数据，解析并挂载到req.body属性中
 
 router.post('/update/avatar',upload.single('avatar'),userinfohandler.updateavatar)
+
+
 //向外共享路由对象
 
 module.exports = router

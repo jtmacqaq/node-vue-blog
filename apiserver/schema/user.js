@@ -13,6 +13,7 @@ const password = joi.string().required()
 const id = joi.number().integer().min(1).required()
 const nickname = joi.string().required()
 const email = joi.string().email().required()
+const rolename = joi.string().valid('管理员','作者','游客')
 
 
 //定义验证avatar头像的验证规则
@@ -25,7 +26,9 @@ const avatar = joi.string().dataUri().required()
 exports.reg_login_schema = {
     body:{
         username,
-        password
+        password,
+        rolename
+
     }
 }
 //验证规则对象 - 更新用户基本信息

@@ -113,3 +113,18 @@ exports.updateavatar = (req,res) =>{
         res.cc(avatarUrl,0)
     })
 }
+
+
+//获取全部用户列表处理函数
+
+exports.getuserinfolist = async (req,res) =>{
+    const page_num = parseInt(req.query.page_num) //页码
+    const page_size = parseInt(req.query.page_size)  //每页显示的数量
+    const result = await user.findAndCountAll({
+        offset: (page_num - 1) * page_size,
+        limit: page_size,
+        attributes:['id','username','email','user_pic']
+    })
+    res.cc(result,0)
+
+}

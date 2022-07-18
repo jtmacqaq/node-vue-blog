@@ -84,8 +84,9 @@ export default {
         window.sessionStorage.setItem("token", res.token);
         window.localStorage.setItem('uid',res.uid)
         window.localStorage.setItem('nid',res.token)
-        //然后跳转到后台主页,路由地址为/home
-        this.$router.push("/home");
+        window.localStorage.setItem('userinfo',JSON.stringify(res))
+        //然后跳转到后台主页,路由地址为/home,这里用catch捕获错误，而且不打印
+        this.$router.push({path:'/home'}).catch(() =>{});
       });
     },
     //注册
