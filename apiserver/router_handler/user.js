@@ -109,6 +109,7 @@ module.exports.login = (req,res) =>{
 
         }
         const uid = results[0].id
+        console.log(uid)
         //生成token
         const userxinxi = {...results[0],password:'',user_pic:''}
         //对用户的信息进行加密，生成token
@@ -120,10 +121,17 @@ module.exports.login = (req,res) =>{
             raw:true,
             attributes:['roleid']
         })
+        console.log(roleinfo)
         //处理roleinfo数组
         const rolestring = []
         roleinfo.map(item =>{
             rolestring.push(item.roleid)
+        })
+        //获取角色信息
+        const rolelist = await role.findAll({
+            where:{
+                id:rolestring
+            }
         })
         console.log(rolestring)
         const routeid = await routes_role.findAll({
@@ -142,13 +150,15 @@ module.exports.login = (req,res) =>{
                 id:routestring
             }
         })
+        console.log(routes)
         console.log(tokenstr)
         res.send({
             status:0,
             messages:'登录成功',
             token: 'Bearer ' + tokenstr,
             uid,
-            routes
+            routes,
+            rolelist
         })
 
     })

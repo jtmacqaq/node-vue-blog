@@ -29,6 +29,18 @@ module.exports = (DataTypes,sequelize) =>{
             meta: { 
                 field:'meta',
                 type:DataTypes.STRING(255)
+             },
+             icon:{
+                field:'icon',
+                type:DataTypes.STRING(255)
+             },
+             redirect:{
+                 field:'redirect',
+                 type:DataTypes.STRING(255) 
+             },
+             parentid:{
+                 field:'parentid',
+                 type:DataTypes.INTEGER(11)
              }
         },
         {

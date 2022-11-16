@@ -65,9 +65,17 @@ export default {
       this.rolelist = res.message;
       console.log(this.rolelist);
     },
-    opennav(roleid){
-        this.routeroleinfo.roleid = roleid,
+    async opennav(roleid){
         this.dialogVisible = true
+        this.routeroleinfo.roleid = roleid
+        const {data:res} = await this.$http.get(`/nav/getrouterlist/${roleid}`)
+        console.log(res)
+        const routerolelist = []
+        res.message.forEach(item => {
+          routerolelist.push(item.routesid)
+        });
+       console.log(routerolelist)
+       this.routeroleinfo.routesid = routerolelist
     },
     async getroutelist() {
       const { data: res } = await this.$http.get("/nav/getroute");

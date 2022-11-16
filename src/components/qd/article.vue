@@ -146,7 +146,9 @@ export default {
       console.log(res);
       if (res.status !== 0) this.$message.error("获取信息失败");
       const datalist = [];
+      console.log(res.message)
       res.message.map((item) => (item.children = []));
+      console.log(res.message)
       res.message.forEach((item) => {
         res.message.forEach((item2) => {
           if (item2.parent_id === item.id) {

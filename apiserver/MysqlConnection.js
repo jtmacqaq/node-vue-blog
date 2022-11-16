@@ -130,7 +130,7 @@ route.belongsToMany(role,{
 // like.belongsTo(articles,{
 //     foreignKey:'post_id'
 // })
-sequelize.sync()
+sequelize.sync({alert:true})
 module.exports = {
     tag,
     articletag,

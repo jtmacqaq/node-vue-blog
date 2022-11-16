@@ -1,19 +1,21 @@
 <template>
   <div>
     <el-card class="box-card">
-      <el-table :data="userinfolist" style="width: 100%">
-        <el-table-column type="index" label="序号" width="180">
+      <el-table :data="userinfolist" style="width: 120%">
+        <el-table-column type="index" label="序号" width="120">
         </el-table-column>
-        <el-table-column prop="username" label="用户名" width="180">
+        <el-table-column prop="username" label="用户名" width="120">
         </el-table-column>
-        <el-table-column prop="email" label="邮箱" width="180">
+        <el-table-column prop="email" label="邮箱" width="120">
+        </el-table-column>
+        <el-table-column prop="roles[0].rolename" label="角色" width="120">
         </el-table-column>
         <el-table-column prop="user_pic" label="头像">
-        <template slot-scope="scope">
+          <template slot-scope="scope">
             <el-avatar :src="scope.row.user_pic"></el-avatar>
-
-        </template>
+          </template>
         </el-table-column>
+
         <el-table-column label="操作">
           <!-- 作用域插槽 -->
           <template slot-scope="scope">
@@ -79,15 +81,11 @@ export default {
   },
   methods: {
     async getuserinfolist() {
-      const { data: res } = await this.$http.get("/my/userinfolist", {
-        params: {
-          page_num: this.page_num,
-          page_size: this.page_size,
-        },
-      });
+      const { data: res } = await this.$http.get("/role/userrolelist");
       console.log(res);
-      this.userinfolist = res.message.rows;
+      this.userinfolist = res.message;
       this.count = res.message.count;
+      //默认角色选择的值
     },
     //获取全部角色
     async getrolelist() {
@@ -96,9 +94,10 @@ export default {
       this.checkList = res.message;
       console.log(this.checkList);
     },
-    changerole(val) {
-      this.addroleinfo.roleid = val;
-      console.log(this.addroleinfo.roleid);
+    changerole() {
+      //设置只能选中一个
+      this.addroleinfo.roleid = this.addroleinfo.roleid.slice(-1)
+      console.log(this.addroleinfo.roleid)
     },
     handleSizeChange(newsize) {
       console.log(newsize);
@@ -112,19 +111,38 @@ export default {
     },
     //分配角色函数
     async editorrole(userid) {
-      this.addroleinfo.userid = userid;
-      console.log("dianji");
+      // console.log(this.userinfolist[userid - 1].roles[0])
+      // this.addroleinfo.roleid.push(this.userinfolist[userid - 1].roles[0].id);
+      this.addroleinfo.userid = userid
+      const {data:res} = await this.$http.get(`/role/rolesid/${userid}`)
+      console.log(res)
+      if(res.status !== 0) return this.$message.error('返回数据失败')
+      if(res.message.length === 0){
+        this.dialogVisible = true;
+        return false
+      }
+      this.addroleinfo.roleid.push(res.message[0].roleid)
       this.dialogVisible = true;
     },
     //添加角色
     async addrole() {
       console.log("点击了确定");
-      console.log(this.addroleinfo.roleid)
-    //   const addroleinfo = qs.stringify(this.addroleinfo);
-      console.log(this.addroleinfo)
-      const { data: res } = await this.$http.post("/role/assignroles",this.addroleinfo);
-      console.log(res);
-    },  
+      console.log(this.addroleinfo.roleid);
+      //   const addroleinfo = qs.stringify(this.addroleinfo);
+      console.log(this.addroleinfo);
+      const { data: res } = await this.$http.post(
+        "/role/assignroles",
+        this.addroleinfo
+      );
+      if(res.status === 3){
+        this.$message.success(res.message)
+      }
+      else{
+        this.$message.success(res.message)
+        this.dialogVisible = false
+      }
+      
+    },
   },
   created() {
     this.getuserinfolist();

@@ -10,6 +10,7 @@
         <p>欢迎，{{ userinfo.username }}</p>
         <i class="el-icon-switch-button"></i>
         <el-button type="text" @click="logout">退出</el-button>
+        
       </div>
     </el-header>
     <el-container>
@@ -130,7 +131,7 @@ export default {
       if (res.status !== 0) return this.$message.error("获取信息失败");
       this.userinfo = res.data;
       console.log(this.userinfo);
-      this.$store.commit('getiusernfo', this.userinfo)
+      // this.$store.commit('getiusernfo', this.userinfo)
     },
 
     logout() {
@@ -153,36 +154,15 @@ export default {
 };
 </script>
 <style scoped>
-.el-header {
-  background-color: #373d41;
-}
-.el-aside {
-  background-color: #333744;
-}
+
+
 .el-main {
   background-color: #eaedf1;
 }
 .elcontainer {
   height: 100%;
 }
-.el-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.el-header img {
-  height: 60px;
-  width: 60px;
-}
-.header_left {
-  display: flex;
-  color: aliceblue;
-  align-items: center;
-  justify-content: center;
-}
-.header_left p {
-  margin-right: 20px;
-}
+
 .el-button {
   margin-left: 10px;
 }
@@ -205,10 +185,5 @@ export default {
   margin-right: 30px;
   display: flex;
 }
-.adminlogo {
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  font-weight: bold;
-  color: white;
-}
+
 </style>

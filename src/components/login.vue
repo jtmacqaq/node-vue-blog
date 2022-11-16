@@ -39,9 +39,10 @@ import qs from "qs";
 export default {
   data() {
     return {
+      lytree:[],
       loginfrom: {
-        username: "admin10",
-        password: "333333",
+        username: "jcq123",
+        password: "123456",
       },
       //这是表单的验证规则对象
       loginfromrules: {
@@ -80,11 +81,40 @@ export default {
         console.log(res);
         if (res.status !== 0) return this.$message.error("登陆失败");
         this.$message.success("登陆成功");
+        // this.lytree = res.routes
+        //处理路由
+           const routertree = []
+        const routerlist = res.routes.map(item =>{
+          item.children = []
+          return item
+        })
+        routerlist.forEach(item =>{
+          routerlist.forEach(item1 =>{
+            if(item1.parentid === item.id){
+              item.children.push(item1)
+            }
+          })
+        })
+        routerlist.forEach(item =>{
+          if(item.parentid === 0){
+            routertree.push(item)
+          }
+        })
+
+        this.lytree = routertree
+
+
+        //将登陆信息的路由存入vuex中
+        this.$store.commit('ly',this.lytree)
+      
+        
+        
         //将token保存在sessionStorage中
         window.sessionStorage.setItem("token", res.token);
         window.localStorage.setItem('uid',res.uid)
         window.localStorage.setItem('nid',res.token)
         window.localStorage.setItem('userinfo',JSON.stringify(res))
+        window.localStorage.setItem('lytree',JSON.stringify(this.lytree))
         //然后跳转到后台主页,路由地址为/home,这里用catch捕获错误，而且不打印
         this.$router.push({path:'/home'}).catch(() =>{});
       });
