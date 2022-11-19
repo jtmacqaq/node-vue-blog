@@ -7,12 +7,6 @@ import ElementUI from 'element-ui'
 import './assets/css/global.css'
 //导入axios
 import axios from 'axios'
-//引入ueditor相关的配置
-import '../public/UE/ueditor.config.js'
-import '../public/UE/ueditor.all.min.js'
-import '../public/UE/lang/zh-cn/zh-cn.js'
-import '../public/UE/ueditor.parse.min.js'
-
 //导入字体库
 import '../font/iconfont.css'
 
